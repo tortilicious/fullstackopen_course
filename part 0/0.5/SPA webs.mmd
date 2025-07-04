@@ -1,0 +1,6 @@
+sequenceDiagram
+    participant Browser
+    participant Server
+    Browser->>Server: POST request (JSON with form data)
+    Server->>Browser: 201 Created (JSON response)
+    Note over Browser: Browser doesn't reload.<br/>JavaScript modifies DOM directly<br/>using the response data.
