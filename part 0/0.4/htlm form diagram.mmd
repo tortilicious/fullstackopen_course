@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant Browser
+    participant Server
+    Browser->>Server: POST /submit-form (with form data)
+    Server->>Browser: HTTP 302 Redirect to /success
+    Note over Browser: Browser automatically follows redirect
+    Browser->>Server: GET /success (HTML page)
+    Server->>Browser: HTML file
+    Note over Browser: Browser parses HTML and finds resource references
+    Browser->>Server: GET /styles.css
+    Server->>Browser: CSS file
+    Browser->>Server: GET /script.js
+    Server->>Browser: JS file
+    Note over Browser: Page fully loaded and rendered
