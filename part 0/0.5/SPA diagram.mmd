@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant Browser
+    participant Server
+    Browser->>Server: GET (initial page request)
+    Server->>Browser: Sends .html file
+    Note over Browser: Browser parses HTML and finds resource references
+    Browser->>Server: GET .css file
+    Server->>Browser: Sends CSS file
+    Browser->>Server: GET .js file
+    Server->>Browser: Sends .js file
+    Note over Browser: JavaScript loads and executes
+    Browser->>Server: GET (fetch existing notes)
+    Server->>Browser: JSON with existing notes
+    Note over Browser: JavaScript renders the notes<br/>to DOM without page reload
