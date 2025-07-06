@@ -1,2 +1,2 @@
-const Person = ({name}) => <p><strong>{name}</strong></p>
+const Person = ({name, phoneNumber}) => <p><strong>{name} {phoneNumber}</strong></p>
 export default Person
