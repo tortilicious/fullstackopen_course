@@ -2,13 +2,13 @@ import {useState} from 'react'
 import Person from "./components/Person.jsx";
 
 const App = () => {
-  const [persons, setPersons] = useState([{name: 'Arto Hellas'}])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
 
   const addNewPerson = (event) => {
     event.preventDefault()
     console.log('Adding new person:', newName)
-    setPersons(persons.concat({name: newName}))
+    setPersons(persons.concat({name: newName, id : Date.now()}))
     setNewName('')
   }
 
@@ -28,7 +28,7 @@ const App = () => {
     </form>
     <h2>Numbers</h2>
     {persons.map(person => (
-        <Person key={Math.floor(Math.random() * 10000)} name={person.name}/>
+        <Person key={person.id} name={person.name}/>
     ))}
   </div>)
 }
