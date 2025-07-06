@@ -2,11 +2,11 @@ import Part from "./Part.jsx";
 
 const Course = ({course}) => {
   return (
-      <ul>
+      <div>
         {course.parts.map(part =>
           <Part key={part.id} part={part} />
         )}
-      </ul>
+      </div>
   )
 }
 
