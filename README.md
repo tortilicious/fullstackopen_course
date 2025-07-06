@@ -28,7 +28,7 @@ Full Stack Open es un curso gratuito que cubre el desarrollo web moderno con Jav
 ## Progreso
 
 - [x] Parte 0: Fundamentos de las aplicaciones web
-- [ ] Parte 1: Introducción a React
+- [x] Parte 1: Introducción a React
 - [ ] Parte 2: Comunicación con el servidor
 - [ ] Parte 3: Programación de un servidor con NodeJS y Express
 - [ ] Parte 4: Probando servidores Express, administración de usuarios
