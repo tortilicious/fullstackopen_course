@@ -35,7 +35,6 @@ const App = () => {
 
   return (
       <div>
-
         <Title text="Anecdote of the day"/>
         <p>{anecdotes[selected]}</p>
         <p>has {votes[selected]} votes</p>
@@ -49,25 +48,12 @@ const App = () => {
         {hasVotes ? (<p>{anecdotes[maxVotedAnecdote]}</p>)
             : (<p>No votes yet</p>)
         }
-
-
       </div>
   )
 }
 
-const Button = ({onClick, text}) => {
-  return (
-      <button onClick={onClick}>
-        {text}
-      </button>
-  )
-}
-
-const Title = ({text}) => {
-  return (
-      <h1>{text}</h1>
-  )
-}
+const Button = ({onClick, text}) => <button onClick={onClick}> {text} </button>
+const Title = ({text}) => <h1>{text}</h1>
 
 
 export default App
