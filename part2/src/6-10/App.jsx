@@ -7,9 +7,11 @@ const App = () => {
 
   const addNewPerson = (event) => {
     event.preventDefault()
-    console.log('Adding new person:', newName)
-    setPersons(persons.concat({name: newName, id : Date.now()}))
-    setNewName('')
+    if (newName.trim() !== '') {
+      setPersons(persons.concat({name: newName, id : Date.now()}))
+      console.log('New person added: ', newName)
+      setNewName('')
+    }
   }
 
   const handleInputChange = (event) => {
