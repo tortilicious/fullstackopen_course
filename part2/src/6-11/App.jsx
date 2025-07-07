@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import Filter from "./components/Filter.jsx";
 import Form from "./components/Form.jsx";
 import Numbers from "./components/Numbers.jsx";
-import axios from "axios";
+import personService from "./services/PersonService.js";
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,13 +10,14 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
 
+  // cargamos los datos de la base de datos al navegador. '[]' garantiza que solo se ejecute una vez en lugar de cada renderizado
   useEffect(() => {
-    axios
-        .get('http://localhost:3001/persons')
-        .then(res => {
-          setPersons(res.data);
+    personService
+        .getAll()
+        .then(response => {
+          setPersons(persons.concat(response))
         })
-  })
+  }, [])
 
   const addNewPerson = (event) => {
     event.preventDefault()
@@ -26,10 +27,13 @@ const App = () => {
       if (nameExists) {
         alert(`"${newName}" is already added to phonebook`)
       } else {
-        setPersons(persons.concat({name: newName, number: newNumber}))
-        console.log('New person added: ', newName)
-        setNewName('')
-        setNewNumber('')
+        personService
+            .create({name: newName, number: newNumber})
+            .then(response => {
+              setPersons(persons.concat(response))
+              setNewName('')
+              setNewNumber('')
+            })
       }
     }
   }
