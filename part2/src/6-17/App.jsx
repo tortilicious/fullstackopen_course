@@ -2,13 +2,18 @@ import {useEffect, useState} from 'react'
 import Filter from "./components/Filter.jsx";
 import Form from "./components/Form.jsx";
 import Numbers from "./components/Numbers.jsx";
+import Notification from "./components/Notification.jsx"
 import personService from "./services/PersonService.js";
+import '../index.css'
+
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [newAlertMessage, setNewAlertMessage] = useState(null)
+  const [newAlertClassName, setNewAlertClassName] = useState(null)
 
   // cargamos los datos de la base de datos al navegador. '[]' garantiza que solo se ejecute una vez en lugar de cada renderizado
   useEffect(() => {
@@ -19,6 +24,16 @@ const App = () => {
         })
   }, [])
 
+  const showNotification = (message, type) => {
+    setNewAlertMessage(message)
+    setNewAlertClassName(type)
+
+    setTimeout(() => {
+      setNewAlertMessage(null)
+      setNewAlertClassName(null)
+    }, 2500)
+  }
+
 
 // ✅ Versión más clara
   const addNewPerson = (event) => {
@@ -26,7 +41,9 @@ const App = () => {
 
     // Validación básica
     if (newName.trim() === '' || newNumber.trim() === '') {
-      alert('Name and number are required')
+      showNotification(
+          'Name and number are required',
+          'error')
       return
     }
 
@@ -35,7 +52,10 @@ const App = () => {
     if (existingPerson) {
       // Persona existe
       if (existingPerson.number === newNumber) {
-        alert('This person with this number already exists')
+
+        showNotification(
+            'This person with this number already exists',
+            'error')
         return
       }
 
@@ -48,6 +68,10 @@ const App = () => {
               setPersons(persons.map(p => p.id === existingPerson.id ? response : p))
               setNewName('')
               setNewNumber('')
+
+              showNotification(
+                  'Updated phone number',
+                  'success')
             })
       }
     } else {
@@ -58,22 +82,33 @@ const App = () => {
             setPersons(persons.concat(response))
             setNewName('')
             setNewNumber('')
+
+            showNotification(
+                'Added new person to the list.',
+                'success'
+            )
           })
     }
   }
 
   const handleDeletePerson = (person) => {
+
     if (window.confirm(`Delete ${person.name}?`)) {
       personService
           .remove(person.id)
           .then(() => {
-            console.log('Eliminando del servidor y actualizando estado')
-            console.log('Personas antes del filter:', persons)
-
             const newPersons = persons.filter(p => p.id !== person.id)
-            console.log('Personas despues del filter:', newPersons)
             setPersons(newPersons)
           })
+
+          .catch(() => {
+            // Actualizamos la memoria del navegador con la lista actualizada de personas
+            setPersons(persons.filter(p => p.id !== person.id))
+            showNotification(
+              `Error: ${person.name} was already removed from the server.`,
+              'error')
+              }
+          )
     }
   }
 
@@ -90,8 +125,10 @@ const App = () => {
   }
 
   return (<div>
-
-    <Filter filterValue={newFilter} filterHandler={handleFilterChange}/>
+    <Notification message={newAlertMessage} className={newAlertClassName}/>
+    <Filter
+        filterValue={newFilter}
+        filterHandler={handleFilterChange}/>
     <Form
         onSubmit={addNewPerson}
         newName={newName}

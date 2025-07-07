@@ -6,7 +6,7 @@ const Filter = ({filterValue, filterHandler}) => {
   return (
       <div>
         <Title text="Phonebook"/>
-        <Input text="filter shown with" value={filterValue} onChange={filterHandler} />
+        <Input text="filter shown with" value={filterValue} onChange={filterHandler}/>
       </div>
   )
 }

@@ -5,7 +5,7 @@ import Button from "./Button.jsx";
 const Numbers = ({persons, filter, handleDeletePerson}) => {
 
   return (
-      <div>
+      <div className="numbers">
         <Title text="Numbers"/>
         {
           persons
