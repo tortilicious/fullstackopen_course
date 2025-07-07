@@ -15,7 +15,7 @@ const App = () => {
     personService
         .getAll()
         .then(response => {
-          setPersons(persons.concat(response))
+          setPersons(response)
         })
   }, [])
 
@@ -35,6 +35,21 @@ const App = () => {
               setNewNumber('')
             })
       }
+    }
+  }
+
+  const handleDeletePerson = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService
+          .remove(person.id)
+          .then(() => {
+            console.log('Eliminando del servidor y actualizando estado')
+            console.log('Personas antes del filter:', persons)
+
+            const newPersons = persons.filter(p => p.id !== person.id)
+            console.log('Personas despues del filter:', newPersons)
+            setPersons(newPersons)
+    })
     }
   }
 
@@ -60,7 +75,7 @@ const App = () => {
         onChangeName={handleNameChange}
         newNumber={newNumber}
         onChangeNumber={handlePhoneChange}/>
-    <Numbers persons={persons} filter={newFilter}/>
+    <Numbers persons={persons} filter={newFilter} handleDeletePerson={handleDeletePerson}/>
   </div>)
 }
 
