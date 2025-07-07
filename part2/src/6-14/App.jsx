@@ -19,22 +19,46 @@ const App = () => {
         })
   }, [])
 
+
+// ✅ Versión más clara
   const addNewPerson = (event) => {
     event.preventDefault()
-    const nameExists = persons.some(person => person.name === newName)
 
-    if (newName.trim() !== '' && newNumber.trim() !== '') {
-      if (nameExists) {
-        alert(`"${newName}" is already added to phonebook`)
-      } else {
+    // Validación básica
+    if (newName.trim() === '' || newNumber.trim() === '') {
+      alert('Name and number are required')
+      return
+    }
+
+    const existingPerson = persons.find(person => person.name === newName)
+
+    if (existingPerson) {
+      // Persona existe
+      if (existingPerson.number === newNumber) {
+        alert('This person with this number already exists')
+        return
+      }
+
+      // Persona existe pero con número diferente
+      if (window.confirm(`${existingPerson.name} already exists. Replace the old number?`)) {
+        const updatedPerson = {...existingPerson, number: newNumber}
         personService
-            .create({name: newName, number: newNumber})
+            .update(existingPerson.id, updatedPerson)
             .then(response => {
-              setPersons(persons.concat(response))
+              setPersons(persons.map(p => p.id === existingPerson.id ? response : p))
               setNewName('')
               setNewNumber('')
             })
       }
+    } else {
+      // Persona nueva
+      personService
+          .create({name: newName, number: newNumber})
+          .then(response => {
+            setPersons(persons.concat(response))
+            setNewName('')
+            setNewNumber('')
+          })
     }
   }
 
@@ -49,7 +73,7 @@ const App = () => {
             const newPersons = persons.filter(p => p.id !== person.id)
             console.log('Personas despues del filter:', newPersons)
             setPersons(newPersons)
-    })
+          })
     }
   }
 
@@ -64,7 +88,6 @@ const App = () => {
   const handleFilterChange = (event) => {
     setNewFilter(event.target.value)
   }
-
 
   return (<div>
 
