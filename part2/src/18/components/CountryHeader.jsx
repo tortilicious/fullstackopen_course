@@ -1,5 +1,5 @@
 
-const Header = ({country}) => {
+const CountryHeader = ({country}) => {
   return (
       <div>
         <h1>{country.name.common}</h1>
@@ -11,4 +11,4 @@ const Header = ({country}) => {
 }
 
 
-export default Header
+export default CountryHeader
