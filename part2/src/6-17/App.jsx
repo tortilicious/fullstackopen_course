@@ -4,7 +4,7 @@ import Form from "./components/Form.jsx";
 import Numbers from "./components/Numbers.jsx";
 import Notification from "./components/Notification.jsx"
 import personService from "./services/PersonService.js";
-import '../index.css'
+import './index.css'
 
 
 const App = () => {
