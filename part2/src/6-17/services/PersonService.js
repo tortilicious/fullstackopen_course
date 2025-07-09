@@ -1,7 +1,7 @@
 
 
 import axios from 'axios'
-const baseURL = 'http://localhost:3001/persons'
+const baseURL = 'https://phonebook-api-fdwy.onrender.com/api/persons'
 
 const getAll = () => {
   const request = axios.get(baseURL)
@@ -23,4 +23,4 @@ const remove = (id) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, remove }
+export default { getAll, create, update, remove }git
