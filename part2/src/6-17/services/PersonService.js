@@ -23,4 +23,4 @@ const remove = (id) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, remove }git
+export default { getAll, create, update, remove }
