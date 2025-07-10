@@ -1,24 +1,29 @@
 import axios from 'axios'
-const baseURL = 'https://phonebook-api-fdwy.onrender.com/api/contacts'
+const baseURL = 'https://phonebook-api-fdwy.onrender.com/api'
 
 const getAll = () => {
-  const request = axios.get(baseURL)
+  const request = axios.get(`${baseURL}/contacts`)
+  return request.then(response => response.data)
+}
+
+const getInfo = () => {
+  const request = axios.get(`${baseURL}/info`)
   return request.then(response => response.data)
 }
 
 const create = (newPerson) => {
-  const request = axios.post(baseURL, newPerson)
+  const request = axios.post(`${baseURL}/contacts`, newPerson)
   return request.then(response => response.data)
 }
 
 const update = (id, updatedPerson) => {
-  const request = axios.put(`${baseURL}/${id}`, updatedPerson) // ¡Correcto!
+  const request = axios.put(`${baseURL}/contacts/${id}`, updatedPerson)
   return request.then(response => response.data)
 }
 
 const remove = (id) => {
-  const request = axios.delete(`${baseURL}/${id}`)
+  const request = axios.delete(`${baseURL}/contacts/${id}`)
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, remove }
+export default { getAll, create, update, remove, getInfo }

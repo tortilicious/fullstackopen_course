@@ -18,10 +18,10 @@ const App = () => {
   // cargamos los datos de la base de datos al navegador. '[]' garantiza que solo se ejecute una vez en lugar de cada renderizado
   useEffect(() => {
     personService
-        .getAll()
-        .then(response => {
-          setPersons(response)
-        })
+      .getAll()
+      .then(response => {
+        setPersons(response)
+      })
   }, [])
 
   const showNotification = (message, type) => {
@@ -35,24 +35,21 @@ const App = () => {
   }
 
 
-// ✅ Versión más clara
   const addNewPerson = (event) => {
     event.preventDefault()
 
     // Validación básica
     if (newName.trim() === '' || newNumber.trim() === '') {
       showNotification(
-          'Name and number are required',
-          'error')
+        'Name and number are required',
+        'error')
       return
     }
 
     const existingPerson = persons.find(person => person.name === newName)
 
     if (existingPerson) {
-      // Persona existe
       if (existingPerson.number === newNumber) {
-
         showNotification(
             'This person with this number already exists',
             'error')
@@ -102,11 +99,11 @@ const App = () => {
           })
 
           .catch(() => {
-            // Actualizamos la memoria del navegador con la lista actualizada de personas
-            setPersons(persons.filter(p => p.id !== person.id))
-            showNotification(
-              `Error: ${person.name} was already removed from the server.`,
-              'error')
+                // Actualizamos la memoria del navegador con la lista actualizada de personas
+                setPersons(persons.filter(p => p.id !== person.id))
+                showNotification(
+                    `Error: ${person.name} was already removed from the server.`,
+                    'error')
               }
           )
     }
