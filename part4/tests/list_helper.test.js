@@ -2,6 +2,7 @@ const {test, describe} = require('node:test')
 const assert = require('node:assert')
 const totalLikes = require('../utils/list_helper').totalLikes
 const favoriteBlog = require('../utils/list_helper').favoriteBlog
+const mostBlogs = require('../utils/list_helper').mostBlogs
 
 
 const listWithOneBlog = [
@@ -86,12 +87,12 @@ describe('total likes', () => {
 })
 
 describe('favorite blog', () => {
-  test ('when list has one blog, equals the log', () => {
+  test('when list has one blog, equals the log', () => {
     const result = favoriteBlog(listWithOneBlog)
     assert.deepStrictEqual(result, listWithOneBlog[0])
   })
 
-  test ('when list has no blogs, equals null', () => {
+  test('when list has no blogs, equals null', () => {
     const result = favoriteBlog(listWithNoBlogs)
     assert.deepStrictEqual(result, null)
   })
@@ -99,5 +100,28 @@ describe('favorite blog', () => {
   test('when list has many blogs, equals the log with most likes', () => {
     const result = favoriteBlog(listWithManyBlogs)
     assert.deepStrictEqual(result, listWithManyBlogs[2])
+  })
+})
+
+describe('author with most blogs', () => {
+  test('when list has one blog, equals the author of the blog with one blog', () => {
+    const result = mostBlogs(listWithOneBlog)
+    assert.deepStrictEqual(result, {
+      author: listWithOneBlog[0].author,
+      blogs: 1
+    })
+  })
+
+  test('when has many blogs, equals the author with most blogs', () => {
+    const result = mostBlogs(listWithManyBlogs)
+    assert.deepStrictEqual(result, {
+      author: 'Robert C. Martin',
+      blogs: 3
+    })
+  })
+
+  test('when the list has no blogs, equals null', () =>{
+    const result = mostBlogs(listWithNoBlogs)
+    assert.deepStrictEqual(result, null)
   })
 })
