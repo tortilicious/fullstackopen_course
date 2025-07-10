@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const config = require('./utils/config')
-const blogsRouter = require('./controller/blogs')
+const blogsRouter = require('./controllers/blogs')
 
 
 //  ignore non existent fields in our schema
