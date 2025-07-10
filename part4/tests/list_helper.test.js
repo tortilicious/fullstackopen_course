@@ -3,6 +3,7 @@ const assert = require('node:assert')
 const totalLikes = require('../utils/list_helper').totalLikes
 const favoriteBlog = require('../utils/list_helper').favoriteBlog
 const mostBlogs = require('../utils/list_helper').mostBlogs
+const mostLikes = require('../utils/list_helper').mostLikes
 
 
 const listWithOneBlog = [
@@ -122,6 +123,29 @@ describe('author with most blogs', () => {
 
   test('when the list has no blogs, equals null', () =>{
     const result = mostBlogs(listWithNoBlogs)
+    assert.deepStrictEqual(result, null)
+  })
+})
+
+describe('author with most likes', () => {
+  test('when list has one blog, equals the author of the blog with their likes', () => {
+    const result = mostLikes(listWithOneBlog)
+    assert.deepStrictEqual(result, {
+      author: listWithOneBlog[0].author,
+      likes: 5
+    })
+  })
+
+  test('when has many blogs, equals the author with most total likes', () => {
+    const result = mostLikes(listWithManyBlogs)
+    assert.deepStrictEqual(result, {
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    })
+  })
+
+  test('when the list has no blogs, equals null', () => {
+    const result = mostLikes(listWithNoBlogs)
     assert.deepStrictEqual(result, null)
   })
 })

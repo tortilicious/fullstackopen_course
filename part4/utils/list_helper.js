@@ -13,7 +13,7 @@ const favoriteBlog = (blogs) => {
       )
 }
 
-// return the autor with most blogs {author:'NAME': blogs: NUMBER}
+// return the autor with most blogs {author:'NAME': blogs: NUMBER} or null
 const mostBlogs = (blogs) => {
   if (blogs.length === 0) return null
 
@@ -34,4 +34,28 @@ const mostBlogs = (blogs) => {
   return { author: maxAuthor, blogs: maxBlogs }
 }
 
-module.exports = {totalLikes, favoriteBlog, mostBlogs}
+
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return null
+
+  const authorLikes = blogs.reduce((likes, blog) => {
+    likes[blog.author] = (likes[blog.author] || 0) + blog.likes
+    return likes  // ✅ Corregido: retorna 'likes'
+  }, {})
+
+  let maxAuthor = null
+  let maxLikes = 0
+
+  for (const author in authorLikes) {  // ✅ Corregido: 'in' para claves
+    if (authorLikes[author] > maxLikes) {
+      maxLikes = authorLikes[author]
+      maxAuthor = author
+    }
+  }
+  return {author: maxAuthor, likes: maxLikes}
+}
+
+
+// return the author with most likes {author: 'name', likes: number}
+module.exports = {totalLikes, favoriteBlog, mostBlogs, mostLikes};
+
