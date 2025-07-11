@@ -23,6 +23,17 @@ describe('GET /api/blogs', () => {
     const blogs = await blogsInDB()
     assert.strictEqual(response.body.length, blogs.length)
   })
+  test('checks every blog ID its called "id"' , async() => {
+    const response = await api
+        .get('/api/blogs')
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    const blogs = response.body
+    blogs.forEach(blog => {
+      assert(blog.id, 'Blog should have "id" property')
+    })
+  })
 })
 
 after(async () => {
