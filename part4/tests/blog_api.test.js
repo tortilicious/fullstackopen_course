@@ -88,7 +88,18 @@ describe('POST /api/blogs', () => {
         .send(blogWithoutLikes)
         .expect(201)
 
-    assert(blogResponse.body.likes, 0)
+    assert.strictEqual(blogResponse.body.likes, 0)
+  })
+  test('checks saving a blog without "url" or "title" returns "400 Bad Request"', async() => {
+    const blogWithoutTitleUrl = {
+      author: 'test author',
+      likes: 10
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(blogWithoutTitleUrl)
+        .expect(400)
   })
 })
 
