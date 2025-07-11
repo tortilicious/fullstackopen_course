@@ -77,6 +77,19 @@ describe('POST /api/blogs', () => {
     assert.strictEqual(lastBlog.url, newBlog.url)
     assert.strictEqual(lastBlog.likes, newBlog.likes)
   })
+  test('checks saving a blog without "likes" returns it with "likes = 0"', async() => {
+    const blogWithoutLikes = {
+      title: 'test title',
+      author: 'test author',
+      url: 'testurl'
+    }
+    const blogResponse = await api
+        .post('/api/blogs')
+        .send(blogWithoutLikes)
+        .expect(201)
+
+    assert(blogResponse.body.likes, 0)
+  })
 })
 
 after(async () => {
