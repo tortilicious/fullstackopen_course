@@ -11,3 +11,24 @@ Content-Type: application/json
   "url": "https://example.com",
   "likes": 5
 }
+
+### Update an existing blog
+PUT http://localhost:3003/api/blogs/68701523061ab5992664231b
+Content-Type: application/json
+
+{
+  "author": "New aaauthor",
+  "url": "new_aaaurl.com",
+  "likes": 2022
+}
+
+### Update a non existing blog
+PUT http://localhost:3003/api/blogs/507f1f77bcf86cd799439011
+Content-Type: application/json
+
+{
+  "title": "New Title",
+  "author": "New author",
+  "url": "new_url.com",
+  "likes": 20
+}

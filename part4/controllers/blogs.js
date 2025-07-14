@@ -15,4 +15,16 @@ blogsRouter.post('/', async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
+
+blogsRouter.put('/:id', async (request, response, next) => {
+  const id = request.params.id
+  const updatedBlog = await Blog.findByIdAndUpdate(id, request.body, {new: true, runValidators: true})
+
+  if (updatedBlog) {
+    response.json(updatedBlog)
+  } else {
+    return response.status(404).json({ error: 'blog not found' })
+  }
+})
+
 module.exports = blogsRouter
