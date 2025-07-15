@@ -32,3 +32,14 @@ Content-Type: application/json
   "url": "new_url.com",
   "likes": 20
 }
+
+
+### Post a new User
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "name": "test name",
+  "username": "test username",
+  "password": "123anv"
+}

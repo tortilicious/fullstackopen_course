@@ -3,9 +3,9 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const {test, beforeEach, after, describe} = require('node:test')
 const assert = require('node:assert')
-const {blogsInDB, initializeDB, nonExistingId, initialBlogs} = require('./blog_api_helper')
+const {blogsInDB, initializeDB, clearDB, usersInDB} = require('./blog_api_helper')
 const app = require('../app')
-const {runInContext: list} = require("lodash");
+const User = require("../models/user");
 const api = supertest(app)
 
 
@@ -102,10 +102,6 @@ describe('POST /api/blogs', () => {
   })
 })
 
-after(async () => {
-  await mongoose.connection.close()
-})
-
 describe('PUT /api/blogs/blogId', () => {
   test('updates a blog when endpoint has an existing id', async () => {
     const blogs = await blogsInDB()
@@ -145,3 +141,92 @@ describe('PUT /api/blogs/blogId', () => {
     assert.deepStrictEqual(response.body, {error: 'malformatted id'})
   })
 })
+
+describe('POST /api/users', () => {
+  test('increases collection by 1 when new user is added', async () => {
+    const currentUsers = await usersInDB()
+    const testUser = {
+      name: 'test name',
+      username: 'test username',
+      password: 'test password'
+    }
+
+    await api.post('/api/users')
+        .send(testUser)
+        .expect(201)
+
+    const updatedUsers = await usersInDB()
+    assert.strictEqual(updatedUsers.length, currentUsers.length + 1)
+  })
+  test('response fields matches new User added to DB', async () => {
+    const newUser = {
+      name: 'test name',
+      username: 'test username',
+      password: 'test password'
+    }
+
+    const response = await api.post('/api/users')
+        .send(newUser)
+        .expect(201)
+
+    assert(response.body)
+    assert(!response.body.hashedPassword)
+    assert.strictEqual(response.body.name, newUser.name)
+    assert.strictEqual(response.body.username, newUser.username)
+
+
+    assert(response.body.id)
+    assert(!response.body.password)
+    assert(!response.body._id)
+    assert(!response.body.__v)
+  })
+  test('new User is added to DB', async () => {
+    const newUser = {
+      name: 'test name',
+      username: 'test username',
+      password: 'test password'
+    }
+
+    const response = await api.post('/api/users').send(newUser).expect(201)
+    const newUserId = response.body.id
+
+    const userInDb = await User.findById(newUserId)
+    assert(userInDb)
+    assert.strictEqual(userInDb.name, newUser.name)
+  })
+  test('fails to post an User with an already taken username', async () => {
+    const newUser = {
+      name: 'test name',
+      username: 'mchan',
+      password: 'test password'
+    }
+
+    const response = await api.post('/api/users').send(newUser).expect(400)
+    assert(response.body.error.includes('Username already exists'))
+  })
+  test('fails to post an User with a short password', async () => {
+    const newUser = {
+      name: 'test name',
+      username: 'test username',
+      password: 'te'
+    }
+
+    const response = await api.post('/api/users').send(newUser).expect(400)
+    assert(response.body.error.includes('Password must be at least 3 characters'))
+  })
+  test('fails to post an User with no password', async () => {
+    const newUser = {
+      name: 'test name',
+      username: 'test username',
+    }
+
+    const response = await api.post('/api/users').send(newUser).expect(400)
+    assert(response.body.error.includes('Password is required'))
+  })
+})
+
+after(async () => {
+  await mongoose.connection.close()
+})
+
+
